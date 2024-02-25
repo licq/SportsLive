@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class MainActivity extends AppCompatActivity implements View.OnKeyListener {
+public class MainActivity extends AppCompatActivity {
 
     private TableLayout tableLayout;
 
@@ -24,28 +24,7 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
         setContentView(R.layout.activity_main);
         tableLayout = findViewById(R.id.tableLayout);
 
-        tableLayout.setOnKeyListener(this);
-        tableLayout.requestFocus();
-
         new FetchStreamListTask().execute();
-    }
-
-    @Override
-    public boolean onKey(View v, int keyCode, KeyEvent event) {
-        if (event.getAction() == KeyEvent.ACTION_DOWN) {
-            System.out.println("Key pressed: " + keyCode);
-            switch (keyCode) {
-                case KeyEvent.KEYCODE_DPAD_UP:
-                case KeyEvent.KEYCODE_DPAD_LEFT:
-                    handleUpButton();
-                    return true;
-                case KeyEvent.KEYCODE_DPAD_DOWN:
-                case KeyEvent.KEYCODE_DPAD_RIGHT:
-                    handleDownButton();
-                    return true;
-            }
-        }
-        return false;
     }
 
     @Override
@@ -109,7 +88,9 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
                 }
                 tableLayout.addView(tableRow);
             }
-            tableLayout.getChildAt(1).requestFocus();
+            if(tableLayout.getChildCount() > 1){
+                tableLayout.getChildAt(1).requestFocus();
+            }
         }
 
         private void addMatchToTableRow(TableRow tableRow, Match match) {
@@ -127,19 +108,6 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
             textView.setGravity(Gravity.CENTER);
             tableRow.addView(textView);
         }
-
-    }
-
-
-    private void handleDownButton() {
-        View currentFocusedView = getCurrentFocus();
-        int rowIndex = this.tableLayout.indexOfChild(currentFocusedView);
-        if (rowIndex < this.tableLayout.getChildCount() - 1) {
-            clearHighlight(currentFocusedView);
-            TableRow newRow = (TableRow) tableLayout.getChildAt(rowIndex + 1);
-            hightlightRow(newRow);
-            newRow.requestFocus();
-        }
     }
 
     private void hightlightRow(View view) {
@@ -148,16 +116,5 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
 
     private void clearHighlight(View currentFocusedView) {
         currentFocusedView.setBackgroundColor(Color.TRANSPARENT);
-    }
-
-    private void handleUpButton() {
-        View currentFocusedView = getCurrentFocus();
-        int rowIndex = this.tableLayout.indexOfChild(currentFocusedView);
-        if (rowIndex > 1) {
-            clearHighlight(currentFocusedView);
-            TableRow newRow = (TableRow) tableLayout.getChildAt(rowIndex - 1);
-            hightlightRow(newRow);
-            newRow.requestFocus();
-        }
     }
 }
