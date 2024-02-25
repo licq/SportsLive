@@ -27,6 +27,7 @@ public class WebScraper {
 
     private static String regex = "id=(.+?)\"";
     private static Pattern pattern = Pattern.compile(regex);
+
     public static Matches scrape() {
         Matches matches = new Matches();
         for (int i = 0; i < 3; ) {
@@ -63,6 +64,11 @@ public class WebScraper {
                 doc = Jsoup.connect(link.getUrl()).get();
                 String iframeSrc = doc.select("div.media > iframe").get(0).attr("src");
                 doc = Jsoup.connect(iframeSrc).referrer(getReferer(link.getUrl())).get();
+                String newFrameSrc = doc.select("iframe").get(0).attr("src");
+                if (newFrameSrc.startsWith("../")) {
+                    String absoluteIframeUrl = new java.net.URL(new java.net.URL(iframeSrc), newFrameSrc.substring(3)).toString();
+                    doc = Jsoup.connect(absoluteIframeUrl).referrer(getReferer(iframeSrc)).get();
+                }
                 return videoUrl(doc.html());
             } catch (IOException e) {
                 e.printStackTrace();
@@ -71,15 +77,15 @@ public class WebScraper {
         return "";
     }
 
-    private static String videoUrl(String pageContent){
+    private static String videoUrl(String pageContent) {
         Matcher matcher = pattern.matcher(pageContent);
-        if(matcher.find()){
+        if (matcher.find()) {
             return matcher.group(1);
         }
         throw new RuntimeException("No video url found");
     }
 
-    private static String getReferer(String url){
+    private static String getReferer(String url) {
         String[] parts = url.split("/");
         return parts[0] + "//" + parts[2];
     }
