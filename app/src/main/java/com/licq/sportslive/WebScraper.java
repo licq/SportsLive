@@ -49,6 +49,7 @@ public class WebScraper {
 
                 return matches;
             } catch (IOException e) {
+                e.printStackTrace();
                 i++;
             }
         }

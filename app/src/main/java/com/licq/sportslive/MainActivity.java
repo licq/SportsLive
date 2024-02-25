@@ -89,6 +89,14 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
                 tableRow.setLayoutParams(layoutParams);
                 addMatchToTableRow(tableRow, match);
 
+                tableRow.setOnFocusChangeListener((v, hasFocus) -> {
+                    if (hasFocus) {
+                        hightlightRow(v);
+                    } else {
+                        clearHighlight(v);
+                    }
+                });
+
                 if (match.canWatch()) {
                     tableRow.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -110,7 +118,6 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
             createTextView(match.getTitle(), tableRow);
             createTextView(match.getStartTimeForDisplay(), tableRow);
             createTextView(match.getStatus().toString(), tableRow);
-            createTextView(match.getLinks().description(), tableRow);
         }
 
         private void createTextView(String text, TableRow tableRow) {
