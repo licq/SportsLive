@@ -38,15 +38,15 @@ public class LiveStreamActivity extends AppCompatActivity {
         links = (Links) intent.getSerializableExtra("links");
 
         playerView = findViewById(R.id.player_view);
-        new GetStreamLinkTask().execute(links.first());
+        new GetStreamLinkTask().execute(links);
     }
 
-    private class GetStreamLinkTask extends AsyncTask<Link, Void, String> {
+    private class GetStreamLinkTask extends AsyncTask<Links, Void, String> {
 
         @Override
-        protected String doInBackground(Link... links) {
-            Link link = links[0];
-            return WebScraper.getStreamLink(link);
+        protected String doInBackground(Links... linkses) {
+            Links links = linkses[0];
+            return WebScraper.getStreamLink(links);
         }
 
         @Override

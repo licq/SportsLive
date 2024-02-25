@@ -11,7 +11,7 @@ public class Matches implements Iterable<Match> {
     private List<Match> matches = new ArrayList<>();
 
     public void addMatch(Match match) {
-        if (match.getStatus() != Status.ENDED)
+        if (match.getStatus() != Status.ENDED && match.getSubCategory().wantToWatch())
             matches.add(match);
     }
 

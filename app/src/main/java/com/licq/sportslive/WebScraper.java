@@ -56,16 +56,19 @@ public class WebScraper {
         return matches;
     }
 
-    public static String getStreamLink(Link link) {
-        Document doc = null;
-        try {
-            doc = Jsoup.connect(link.getUrl()).get();
-            String iframeSrc = doc.select("div.media > iframe").get(0).attr("src");
-            doc = Jsoup.connect(iframeSrc).referrer(getReferer(link.getUrl())).get();
-            return videoUrl(doc.html());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+    public static String getStreamLink(Links links) {
+        for (Link link : links) {
+            Document doc = null;
+            try {
+                doc = Jsoup.connect(link.getUrl()).get();
+                String iframeSrc = doc.select("div.media > iframe").get(0).attr("src");
+                doc = Jsoup.connect(iframeSrc).referrer(getReferer(link.getUrl())).get();
+                return videoUrl(doc.html());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
+        return "";
     }
 
     private static String videoUrl(String pageContent){

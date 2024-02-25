@@ -1,12 +1,15 @@
 package com.licq.sportslive;
 
+import androidx.annotation.NonNull;
+
 import org.jsoup.nodes.Element;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
-public class Links implements Serializable {
+public class Links implements Serializable, Iterable<Link> {
 
     private List<Link> links = new ArrayList<>();
 
@@ -20,11 +23,11 @@ public class Links implements Serializable {
         return "没有直播源";
     }
 
-    public Link first() {
-        if(links != null){
-            return links.get(0);
-        }
-        return null;
+
+    @NonNull
+    @Override
+    public Iterator<Link> iterator() {
+        return links.iterator();
     }
 }
 
