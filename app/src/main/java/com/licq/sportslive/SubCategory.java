@@ -49,6 +49,11 @@ public class SubCategory {
         blackList.add("男篮欧国杯");
         blackList.add("埃及超");
         blackList.add("希超");
+        blackList.add("秘鲁甲");
+        blackList.add("巴拉甲");
+        blackList.add("男篮亚洲杯");
+        blackList.add("男篮美洲杯");
+        blackList.add("墨西甲");
     }
 
     private final String text;
